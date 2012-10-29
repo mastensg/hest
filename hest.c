@@ -167,12 +167,22 @@ swapwin(HestWindow a, HestWindow b) {
     showhide();
 }
 
+static int
+screen_compare(const void *a, const void *b) {
+    const XineramaScreenInfo *sa = (XineramaScreenInfo *)a;
+    const XineramaScreenInfo *sb = (XineramaScreenInfo *)b;
+
+    return sa->x_org - sb->x_org;
+}
+
 static void
 xinerama_setup(void) {
-    int number;
-    XineramaScreenInfo *screens = XineramaQueryScreens(dpy, &number);
+    int numscreens;
+    XineramaScreenInfo *screens = XineramaQueryScreens(dpy, &numscreens);
 
-    for(int s = 0; s < (int)LENGTH(monitors) && s < number; ++s) {
+    qsort(screens, numscreens, sizeof(XineramaScreenInfo), screen_compare);
+
+    for(int s = 0; s < (int)LENGTH(monitors) && s < numscreens; ++s) {
         monitors[s].x = screens[s].x_org;
         monitors[s].y = screens[s].y_org;
         monitors[s].w = screens[s].width;
@@ -180,6 +190,8 @@ xinerama_setup(void) {
     }
 
     XFree(screens);
+
+    showhide();
 }
 
 static void

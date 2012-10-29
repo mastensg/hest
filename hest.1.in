@@ -46,7 +46,7 @@ The
 program does not work with
 .BR hest .
 .TP
-If you find more bugs, please send them to <mastensg@ping.uio.no>.
+If you find more bugs, please report them to <mastensg@ping.uio.no>.
 .SH AUTHOR
 Martin Stensgård <mastensg@ping.uio.no>
 .SH SEE ALSO
