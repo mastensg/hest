@@ -98,7 +98,7 @@ drawpager(void) {
 
     t = time(NULL);
     tmp = localtime(&t);
-    strftime(buffer, LENGTH(buffer), "%Y-%m-%d %H:%M:%S | %G-%V-%u", tmp);
+    strftime(buffer, LENGTH(buffer), "%Y-%m-%d %I:%M:%S %p", tmp);
     XDrawString(dpy, pager, gc, 16, mon->h/3.5 + 26, buffer, strlen(buffer));
 }
 
