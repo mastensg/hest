@@ -65,10 +65,6 @@ drawpager(void) {
     w = (mon->w / 10 - 12);
     h = (mon->h / 10 - 12);
 
-    XSetForeground(dpy, gc, XBlackPixel(dpy, screen));
-    XFillRectangle(dpy, pager, gc, 0, 0, mon->w / 3.5,
-            mon->h / 3.5 + 32 + 1);
-
     for(i = 0; i < LENGTH(mon->windows); ++i) {
         x = (i % 10 + 1) * 10 + i % 10 * w;
         y = (i / 10 + 1) * 10 + i / 10 * h;
@@ -81,7 +77,7 @@ drawpager(void) {
             XAllocNamedColor(dpy, cmap, vacant_bg_color, &color, &color);
 
         XSetForeground(dpy, gc, color.pixel);
-        XFillRectangle(dpy, pager, gc, x, y, w, h);
+        XFillArc (dpy, pager, gc, x, y, w, h, 0, 360 * 64);
 
         if(i == mon->curwin)
             XAllocNamedColor(dpy, cmap, current_border_color, &color, &color);
@@ -89,11 +85,12 @@ drawpager(void) {
             XAllocNamedColor(dpy, cmap, normal_border_color, &color, &color);
 
         XSetForeground(dpy, gc, color.pixel);
-        XDrawRectangle(dpy, pager, gc, x, y, w, h);
+        XSetLineAttributes(dpy, gc, 1, LineDoubleDash, 1, 1);
+        XDrawArc(dpy, pager, gc, x, y, w, h, 0, 360*64);
 
         XAllocNamedColor(dpy, cmap, fg_color, &color, &color);
         XSetForeground(dpy, gc, color.pixel);
-        XDrawString(dpy, pager, gc, x + 8, y + 16, buffer, strlen(buffer));
+        XDrawString(dpy, pager, gc, x + w/2, y + h/2, buffer, strlen(buffer));
     }
 
     t = time(NULL);
