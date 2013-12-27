@@ -40,8 +40,8 @@ static KeySym window_keys[30] = {
     XK_a, XK_s, XK_d, XK_f, XK_g, XK_h, XK_j, XK_k,     XK_l,      XK_semicolon,
     XK_z, XK_x, XK_c, XK_v, XK_b, XK_n, XK_m, XK_comma, XK_period, XK_slash
 };
-static const char *current_border_color  = "#bbccff";
-static const char *fg_color              = "#ffeedd";
+static const char *current_border_color  = "#da1337";
+static const char *fg_color              = "#cccc99";
 static const char *normal_border_color   = "#445566";
 static const char *occupied_bg_color     = "#223344";
 static const char *vacant_bg_color       = "#000000";
