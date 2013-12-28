@@ -40,8 +40,8 @@ static KeySym window_keys[30] = {
     XK_a, XK_s, XK_d, XK_f, XK_g, XK_h, XK_j, XK_k,     XK_l,      XK_semicolon,
     XK_z, XK_x, XK_c, XK_v, XK_b, XK_n, XK_m, XK_comma, XK_period, XK_slash
 };
-static const char *current_border_color  = "#bbccff";
-static const char *fg_color              = "#ffeedd";
+static const char *current_border_color  = "#da1337";
+static const char *fg_color              = "#cccc99";
 static const char *normal_border_color   = "#445566";
 static const char *occupied_bg_color     = "#223344";
 static const char *vacant_bg_color       = "#000000";
@@ -65,10 +65,6 @@ drawpager(void) {
     w = (mon->w / 10 - 12);
     h = (mon->h / 10 - 12);
 
-    XSetForeground(dpy, gc, XBlackPixel(dpy, screen));
-    XFillRectangle(dpy, pager, gc, 0, 0, mon->w / 3.5,
-            mon->h / 3.5 + 32 + 1);
-
     for(i = 0; i < LENGTH(mon->windows); ++i) {
         x = (i % 10 + 1) * 10 + i % 10 * w;
         y = (i / 10 + 1) * 10 + i / 10 * h;
@@ -81,7 +77,7 @@ drawpager(void) {
             XAllocNamedColor(dpy, cmap, vacant_bg_color, &color, &color);
 
         XSetForeground(dpy, gc, color.pixel);
-        XFillRectangle(dpy, pager, gc, x, y, w, h);
+        XFillArc (dpy, pager, gc, x, y, w, h, 0, 360 * 64);
 
         if(i == mon->curwin)
             XAllocNamedColor(dpy, cmap, current_border_color, &color, &color);
@@ -89,16 +85,17 @@ drawpager(void) {
             XAllocNamedColor(dpy, cmap, normal_border_color, &color, &color);
 
         XSetForeground(dpy, gc, color.pixel);
-        XDrawRectangle(dpy, pager, gc, x, y, w, h);
+        XSetLineAttributes(dpy, gc, 1, LineDoubleDash, 1, 1);
+        XDrawArc(dpy, pager, gc, x, y, w, h, 0, 360*64);
 
         XAllocNamedColor(dpy, cmap, fg_color, &color, &color);
         XSetForeground(dpy, gc, color.pixel);
-        XDrawString(dpy, pager, gc, x + 8, y + 16, buffer, strlen(buffer));
+        XDrawString(dpy, pager, gc, x + w/2, y + h/2, buffer, strlen(buffer));
     }
 
     t = time(NULL);
     tmp = localtime(&t);
-    strftime(buffer, LENGTH(buffer), "%Y-%m-%d %H:%M:%S | %G-%V-%u", tmp);
+    strftime(buffer, LENGTH(buffer), "%Y-%m-%d %I:%M:%S %p", tmp);
     XDrawString(dpy, pager, gc, 16, mon->h/3.5 + 26, buffer, strlen(buffer));
 }
 
